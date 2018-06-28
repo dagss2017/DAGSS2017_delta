@@ -6,6 +6,7 @@ package es.uvigo.esei.dagss.dominio.entidades;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -16,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Cita implements Serializable {
@@ -39,13 +41,19 @@ public class Cita implements Serializable {
     @Min(1)
     Integer duracion;
     
+    @Size(min = 0, max = 50)
+    @Column(length = 50)
+    String estado;
+    
+    /*
     @Enumerated(EnumType.STRING)
     EstadoCita estado;
+    */
         
     public Cita() {
     }
 
-    public Cita(Paciente paciente, Medico medico, Date fecha, Date hora, Integer duracion, EstadoCita estado) {
+    public Cita(Paciente paciente, Medico medico, Date fecha, Date hora, Integer duracion, String estado) {
         this.paciente = paciente;
         this.medico = medico;
         this.fecha = fecha;
@@ -104,11 +112,11 @@ public class Cita implements Serializable {
     }
 
     
-    public EstadoCita getEstado() {
+    public String getEstado() {
         return estado;
     }
 
-    public void setEstado(EstadoCita estado) {
+    public void setEstado(String estado) {
         this.estado = estado;
     }
 

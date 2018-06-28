@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Receta implements Serializable {
@@ -36,10 +37,16 @@ public class Receta implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     Date finValidez;
 
+    @Size(min = 0, max = 50)
+    @Column(length = 50)
+    String estadoReceta;
+    
+    /*
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     EstadoReceta estadoReceta;
-
+    */
+    
     @ManyToOne(optional = true)
     Farmacia farmaciaDispensadora;
 
@@ -47,11 +54,11 @@ public class Receta implements Serializable {
     public Receta() {
     }
 
-    public Receta(Prescripcion prescripcion, Integer cantidad, Date inicioValidez, Date finValidez, EstadoReceta estadoReceta) {
+    public Receta(Prescripcion prescripcion, Integer cantidad, Date inicioValidez, Date finValidez, String estadoReceta) {
         this(prescripcion, cantidad, inicioValidez, finValidez, estadoReceta, null);
     }
 
-    public Receta(Prescripcion prescripcion, Integer cantidad, Date inicioValidez, Date finValidez, EstadoReceta estadoReceta, Farmacia farmaciaDispensadora) {
+    public Receta(Prescripcion prescripcion, Integer cantidad, Date inicioValidez, Date finValidez, String estadoReceta, Farmacia farmaciaDispensadora) {
         this.prescripcion = prescripcion;
         this.cantidad = cantidad;
         this.inicioValidez = inicioValidez;
@@ -100,19 +107,19 @@ public class Receta implements Serializable {
         this.finValidez = finValidez;
     }
 
-    public EstadoReceta getEstado() {
+    public String getEstado() {
         return estadoReceta;
     }
 
-    public void setEstado(EstadoReceta estado) {
+    public void setEstado(String estado) {
         this.estadoReceta = estado;
     }
 
-    public EstadoReceta getEstadoReceta() {
+    public String getEstadoReceta() {
         return estadoReceta;
     }
 
-    public void setEstadoReceta(EstadoReceta estadoReceta) {
+    public void setEstadoReceta(String estadoReceta) {
         this.estadoReceta = estadoReceta;
     }
 

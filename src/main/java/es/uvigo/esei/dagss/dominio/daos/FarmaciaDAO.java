@@ -14,11 +14,9 @@ public class FarmaciaDAO extends GenericoDAO<Farmacia> {
 
     public Farmacia buscarPorNIF(String nif) {
         TypedQuery<Farmacia> q = em.createQuery("SELECT f FROM Farmacia AS f "
-                                              + "  WHERE f.nif = :nif", Farmacia.class);
+                                              + "WHERE f.nif = :nif", Farmacia.class);
         q.setParameter("nif", nif);
 
         return filtrarResultadoUnico(q);
     }
-
-    // Completar aqui
 }

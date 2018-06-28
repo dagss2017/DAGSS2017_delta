@@ -4,6 +4,8 @@
 package es.uvigo.esei.dagss.dominio.daos;
 
 import es.uvigo.esei.dagss.dominio.entidades.Prescripcion;
+import java.util.Date;
+import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
@@ -20,5 +22,16 @@ public class PrescripcionDAO extends GenericoDAO<Prescripcion> {
         return q.getSingleResult();
     }
     
-    // Completar aqui  
+    public List<Prescripcion> obtenerPrescripciones(long id) {
+        Date fecha = new Date();
+        TypedQuery<Prescripcion> q = em.createQuery("SELECT p FROM Prescripcion AS p "
+                                            + "WHERE p.paciente.id = :pac_id "
+                                            + "AND p.fechaFin >= :fecha "
+                                            + "ORDER BY p.fechaInicio "
+                                            , Prescripcion.class);
+        
+        q.setParameter("pac_id", id);
+        q.setParameter("fecha", fecha);
+        return q.getResultList();
+    }
 }

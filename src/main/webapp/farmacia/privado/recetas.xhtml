@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui">
+
+    <body>
+
+        <ui:composition template="/plantillas/plantillaComun.xhtml">
+            <ui:define name="tituloPagina">
+                <h2 style="text-align: center"> Recetas del paciente: #{pacienteControlador.pacienteActual.nombre} #{pacienteControlador.pacienteActual.apellidos}</h2>                
+            </ui:define>            
+
+            <ui:define name="menu">
+                <ui:include src="/plantillas/menuComun.xhtml"/>
+            </ui:define>
+
+            <ui:define name="contenido">
+                <h:form>
+                    #{farmaciaControlador.obtenerRecetas(pacienteControlador.pacienteActual.id)}
+                    <b:column span="10" offset="1" style="margin-bottom: 1.5%">
+                        <b:dataTable value="#{farmaciaControlador.recetas}"
+                                     var="receta" style="margin-top: 3.5%" paginated="false" info="false" searching="false">
+                            <b:dataTableColumn orderable="false">
+                                <f:facet name="header"><h:outputLabel value="Medicamento"/></f:facet>
+                                <h:outputText value="#{receta.prescripcion.medicamento.nombre}"/>
+                            </b:dataTableColumn>
+                            <b:dataTableColumn orderable="false">
+                                <f:facet name="header"><h:outputLabel value="Médico"/></f:facet>
+                                <h:outputText value="#{receta.prescripcion.medico.nombre} #{receta.prescripcion.medico.apellidos}"/>
+                            </b:dataTableColumn>
+                            <b:dataTableColumn orderable="false">
+                                <f:facet name="header"><h:outputLabel value="Inicio validez"/></f:facet>
+                                <h:outputText value="#{receta.inicioValidez}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy hh:mm" locale="es_ES" timeZone="Europe/Madrid"/>
+                                </h:outputText>
+                            </b:dataTableColumn>
+                            <b:dataTableColumn orderable="false">
+                                <f:facet name="header"><h:outputLabel value="Fin validez"/></f:facet>
+                                <h:outputText value="#{receta.finValidez}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy hh:mm" locale="es_ES" timeZone="Europe/Madrid"/>
+                                </h:outputText>
+                            </b:dataTableColumn>
+                            <b:dataTableColumn orderable="false">
+                                <f:facet name="header"><h:outputLabel value="Estado"/></f:facet>
+                                <h:outputText value="#{receta.estadoReceta}"/>
+                            </b:dataTableColumn>
+                            <b:dataTableColumn orderable="false">
+                                <f:facet name="header"><h:outputLabel value="Situación"/></f:facet>
+                                <h:outputText value="No disponible" rendered="#{!farmaciaControlador.estaDisponible(receta)}"/>
+                                <h:outputText value="Disponible" rendered="#{farmaciaControlador.estaDisponible(receta)}"/>
+                            </b:dataTableColumn>
+                            <b:dataTableColumn orderable="false" style="text-align: center">
+                                <f:facet name="header"><h:outputLabel/></f:facet>
+                                <h:outputText value="No disponible" rendered="#{!farmaciaControlador.estaDisponible(receta)}"/>
+                                <b:commandButton value="Servir" look="primary" action="#{farmaciaControlador.servir(receta)}" rendered="#{farmaciaControlador.estaDisponible(receta)}"/>
+                            </b:dataTableColumn> 
+                        </b:dataTable>
+                        <b:commandButton value="Volver" span="2" action="index"/>
+                    </b:column>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

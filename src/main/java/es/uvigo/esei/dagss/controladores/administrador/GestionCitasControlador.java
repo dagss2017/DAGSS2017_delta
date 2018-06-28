@@ -84,7 +84,7 @@ public class GestionCitasControlador implements Serializable {
     public void doNuevo() {
         citaActual = new Cita(); // Cita valia   
         citaActual.setDuracion(DURACION_CITA_POR_DEFECTO);
-        citaActual.setEstado(EstadoCita.PLANIFICADA);
+        citaActual.setEstado("planificada");
     }
 
     public void doVer(Cita cita) {
