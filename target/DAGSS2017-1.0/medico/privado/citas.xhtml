@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui">
+
+    <body>
+
+        <ui:composition template="/plantillas/plantillaComun.xhtml">
+            <ui:define name="tituloPagina">               
+                <h2 style="text-align: center"> Citas del médico: #{medicoControlador.medicoActual.nombre} #{medicoControlador.medicoActual.apellidos}</h2>                
+            </ui:define>            
+
+            <ui:define name="menu">
+                <ui:include src="/plantillas/menuComun.xhtml"/>
+            </ui:define>
+
+            <ui:define name="contenido">
+                <h:form>
+                    #{medicoControlador.obtenerCitas(medicoControlador.medicoActual.id)}
+                    <b:column span="10" offset="1" style="margin-bottom: 1.5%">
+                        <b:dataTable value="#{medicoControlador.citas}"
+                                     var="cita" style="margin-top: 3%" paginated="false" info="false" searching="false">
+                            <b:dataTableColumn orderable="false">
+                                <f:facet name="header"><h:outputLabel value="Paciente"/></f:facet>
+                                <h:outputText value="#{cita.paciente.nombre} #{cita.paciente.apellidos}"/>
+                            </b:dataTableColumn>
+                            <b:dataTableColumn orderable="false">
+                                <f:facet name="header"><h:outputLabel value="Hora prevista"/></f:facet>
+                                <h:outputText value="#{cita.hora}">
+                                    <f:convertDateTime pattern="hh:mm"/>
+                                </h:outputText>
+                            </b:dataTableColumn>
+                            <b:dataTableColumn orderable="false">
+                                <f:facet name="header"><h:outputLabel value="Estado"/></f:facet>
+                                <h:outputText value="#{cita.estado}"/>
+                            </b:dataTableColumn>
+                            <b:dataTableColumn orderable="false" style="text-align: center">
+                                <f:facet name="header"><h:outputLabel value="Prescripciones"/></f:facet>
+                                <b:commandButton value="Ver" action="#{pacienteControlador.verPrescripciones(cita)}" look="primary" rendered="#{medicoControlador.estaPendiente(cita)}" style="width: 50%"/>
+                            </b:dataTableColumn>
+                        </b:dataTable>
+                        <b:commandButton value="Volver" span="2" action="index"/>
+                    </b:column>
+                </h:form>      
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui">
+
+    <body>
+        
+        <ui:composition template="/plantillas/plantillaComun.xhtml">
+            <ui:define name="tituloPagina">
+                <h2 style="text-align: center"> Prescripciones del paciente: #{pacienteControlador.pacienteActual.nombre} #{pacienteControlador.pacienteActual.apellidos}</h2>
+            </ui:define>            
+
+            <ui:define name="menu">
+                <ui:include src="/plantillas/menuComun.xhtml"/>
+            </ui:define>
+
+            <ui:define name="contenido">
+                <b:form prependId="false">
+                    <b:column style="text-align: center; margin-top: 1.5%; margin-bottom: 2%">
+                        <b:commandButton size="lg" value="Nueva prescripción" look="warning" action="#{medicoControlador.nuevaPrescripcion(pacienteControlador.pacienteActual)}" icon="plus" icon-align="right"/>
+                    </b:column>    
+
+                    <b:column span="10" offset="1" style="margin-bottom: 1.5%">
+                        <b:dataTable value="#{pacienteControlador.obtenerPrescripciones()}"
+                                     var="prescripcion" paginated="false" info="false" searching="false">
+                            <b:dataTableColumn orderable="false">
+                                <f:facet name="header"><h:outputLabel value="Medicamento"/></f:facet>
+                                <h:outputText value="#{prescripcion.medicamento.nombre} - #{prescripcion.medicamento.fabricante}"/>
+                            </b:dataTableColumn>
+                            <b:dataTableColumn orderable="false">
+                                <f:facet name="header"><h:outputLabel value="Dosis"/></f:facet>
+                                <h:outputText value="#{prescripcion.dosis}"/>
+                            </b:dataTableColumn>
+                            <b:dataTableColumn orderable="false">
+                                <f:facet name="header"><h:outputLabel value="Fecha inicio"/></f:facet>
+                                <h:outputText value="#{prescripcion.fechaInicio}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" locale="es_ES" timeZone="Europe/Madrid"/>
+                                </h:outputText>
+                            </b:dataTableColumn>
+                            <b:dataTableColumn orderable="false">
+                                <f:facet name="header"><h:outputLabel value="Fecha fin"/></f:facet>
+                                <h:outputText value="#{prescripcion.fechaFin}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" locale="es_ES" timeZone="Europe/Madrid"/>
+                                </h:outputText>
+                            </b:dataTableColumn>
+                            <b:dataTableColumn orderable="false" style="text-align: center">
+                                <f:facet name="header"><h:outputLabel/></f:facet>
+                                <b:commandButton look="danger" action="#{medicoControlador.eliminarPrescripcion(prescripcion.id)}" value="Anular" icon="trash" icon-align="right" style="width: 50%;"/>
+                            </b:dataTableColumn>
+                        </b:dataTable>
+                        
+                        <b:commandButton value="Volver" span="2" action="citas"/>
+                        
+                        <b:column span="12" style="text-align: center">
+                            <b:commandButton size="lg" look="success" value="Completar" action="#{pacienteControlador.completarCita()}" style="margin-right: 1% " icon="ok" icon-align="right"/>
+                            <b:commandButton size="lg" look="primary" value="Ausente" action="#{pacienteControlador.ausentarCita()}" iconAwesome="fa-user-times" icon-align="right"/>
+                        </b:column>
+                    </b:column>
+                </b:form>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>
